@@ -1,0 +1,107 @@
+{
+    "max_open_trades": 3,
+    "stake_currency": "USDT",
+    "stake_amount": 50,
+    "tradable_balance_ratio": 0.99,
+    "fiat_display_currency": "USD",
+    "dry_run": true,
+    "dry_run_wallet": 200,
+    "cancel_open_orders_on_exit": false,
+    "trading_mode": "spot",
+    "margin_mode": "",
+    "unfilledtimeout": {
+        "entry": 10,
+        "exit": 10,
+        "exit_timeout_count": 0,
+        "unit": "minutes"
+    },
+    "entry_pricing": {
+        "price_side": "same",
+        "use_order_book": true,
+        "order_book_top": 1,
+        "price_last_balance": 0.0,
+        "check_depth_of_target": false
+    },
+    "exit_pricing": {
+        "price_side": "same",
+        "use_order_book": true,
+        "order_book_top": 1
+    },
+    "exchange": {
+        "name": "gate",
+        "key": "",
+        "secret": "",
+        "ccxt_config": {},
+        "ccxt_async_config": {},
+        "pair_whitelist": [
+            "BTC/USDT", "ETH/USDT", "SOL/USDT", "BNB/USDT", "DOGE/USDT",
+            "XRP/USDT", "ADA/USDT", "AVAX/USDT", "LINK/USDT", "SUI/USDT",
+            "NEAR/USDT", "DOT/USDT", "APT/USDT", "PEPE/USDT", "SHIB/USDT",
+            "LTC/USDT", "BCH/USDT", "UNI/USDT", "FET/USDT", "RENDER/USDT",
+            "INJ/USDT", "TIA/USDT", "STX/USDT", "OP/USDT", "ARB/USDT",
+            "WIF/USDT", "FLOKI/USDT", "ATOM/USDT", "FIL/USDT"
+        ],
+        "pair_blacklist": []
+    },
+    "pairlists": [
+        {
+            "method": "StaticPairList"
+        }
+    ],
+    "telegram": {
+        "enabled": false,
+        "token": "",
+        "chat_id": ""
+    },
+    "api_server": {
+        "enabled": true,
+        "listen_ip_address": "127.0.0.1",
+        "listen_port": 8080,
+        "verbosity": "info",
+        "CORS_origins": ["*"],
+        "username": "freqtrader",
+        "password": "SuperSecretPassword123!",
+        "jwt_secret_key": "ai-trade-2-custom-jwt-secret-key-998877"
+    },
+    "bot_name": "FreqAI-SB3-Bot",
+    "initial_state": "running",
+    "force_entry_enable": true,
+    "freqai": {
+        "enabled": true,
+        "purge_old_models": true,
+        "train_period_days": 15,
+        "backtest_period_days": 7,
+        "identifier": "freqai_sb3_rl",
+        "feature_parameters": {
+            "include_timeframes": ["5m", "15m"],
+            "include_corr_pairlist": ["BTC/USDT", "ETH/USDT"],
+            "indicator_periods_candles": [10, 20],
+            "label_period_candles": 12,
+            "include_shifted_candles": 2,
+            "DI_threshold": 0,
+            "weight_factor": 0.9,
+            "principal_component_analysis": false,
+            "use_cleaning_pipeline": true
+        },
+        "data_split_parameters": {
+            "test_size": 0.25,
+            "random_state": 42
+        },
+        "data_kitchen_parameters": {
+            "max_cpu_count": 2
+        },
+        "rl_config": {
+            "drop_out": 0.2,
+            "train_cycles": 1,
+            "model_type": "PPO",
+            "model_kwargs": {
+                "learning_rate": 0.0003
+            },
+            "policy_type": "MlpPolicy",
+            "model_reward_parameters": {
+                "rr": 1.0,
+                "profit_aim": 0.025
+            }
+        }
+    }
+}

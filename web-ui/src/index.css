@@ -1,0 +1,172 @@
+:root {
+  --binance-bg: #0b0e11;
+  --binance-card: #181a20;
+  --binance-card-hover: #1e2329;
+  --binance-header: #12161c;
+  --binance-border: #2b313a;
+  --binance-green: #0ecb81;
+  --binance-red: #f6465d;
+  --binance-yellow: #f0b90b;
+  --binance-blue: #3b82f6;
+  --binance-text: #eaecef;
+  --binance-text-secondary: #848e9c;
+  --binance-text-muted: #5e6673;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--binance-bg);
+  color: var(--binance-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  line-height: 1.35;
+  font-size: 0.78rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Binance Ultra-Compact Full-Width Card */
+.binance-panel {
+  background: var(--binance-card);
+  border: 1px solid var(--binance-border);
+  border-radius: 4px;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+/* Desktop Fixed Frozen Left Sidebar */
+@media (min-width: 769px) {
+  .binance-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1000;
+    background: var(--binance-card);
+    border-right: 1px solid var(--binance-border);
+    transition: width 0.2s ease-in-out;
+  }
+}
+
+/* Dense Data Table */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dense-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dense-table th {
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--binance-text-secondary);
+  border-bottom: 1px solid var(--binance-border);
+  background: #14181d;
+  white-space: nowrap;
+}
+
+.dense-table td {
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  white-space: nowrap;
+}
+
+.dense-table tr:hover {
+  background: var(--binance-card-hover);
+}
+
+/* Badges */
+.badge-binance {
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-green {
+  background: rgba(14, 203, 129, 0.15);
+  color: var(--binance-green);
+  border: 1px solid rgba(14, 203, 129, 0.3);
+}
+
+.badge-red {
+  background: rgba(246, 70, 93, 0.15);
+  color: var(--binance-red);
+  border: 1px solid rgba(246, 70, 93, 0.3);
+}
+
+.badge-yellow {
+  background: rgba(240, 185, 11, 0.15);
+  color: var(--binance-yellow);
+  border: 1px solid rgba(240, 185, 11, 0.3);
+}
+
+.pulse-green {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--binance-green);
+  box-shadow: 0 0 6px var(--binance-green);
+}
+
+/* MOBILE (HP) BINANCE STYLE BOTTOM NAVIGATION (<768px) */
+@media (max-width: 768px) {
+  .binance-sidebar {
+    position: fixed !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 56px !important;
+    min-height: unset !important;
+    border-right: none !important;
+    border-top: 1px solid var(--binance-border) !important;
+    background: #12161c !important;
+    z-index: 9999 !important;
+  }
+  
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 6px 6px 64px 6px !important; /* Extra bottom padding for sticky nav */
+  }
+
+  .desktop-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat-strip {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+    padding: 6px 8px !important;
+  }
+
+  .stat-strip > div {
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+
+  .hide-on-mobile {
+    display: none !important;
+  }
+}

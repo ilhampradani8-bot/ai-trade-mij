@@ -1,0 +1,33 @@
+# Environment & Credentials (NEVER COMMIT)
+.env
+.env.*
+AGENTS.md
+
+# Virtual Environment & Python Cache
+.venv/
+venv/
+ENV/
+__pycache__/
+*.pyc
+
+# Data & Database Logs
+user_data/data/
+user_data/backtest_results/
+user_data/logs/
+user_data/models/
+*.sqlite
+*.sqlite*
+*.log
+
+# Dependencies & Build Output
+node_modules/
+web-ui/node_modules/
+web-ui/dist/
+dist/
+
+# Freqtrade Submodule / External Clones
+freqtrade/
+
+# OS Junk
+.DS_Store
+Thumbs.db
