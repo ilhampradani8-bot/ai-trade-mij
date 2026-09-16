@@ -31,8 +31,18 @@
         "name": "gate",
         "key": "",
         "secret": "",
-        "ccxt_config": {},
-        "ccxt_async_config": {},
+        "ccxt_config": {
+            "proxies": {
+                "http": "socks5h://127.0.0.1:1080",
+                "https": "socks5h://127.0.0.1:1080"
+            }
+        },
+        "ccxt_async_config": {
+            "proxies": {
+                "http": "socks5h://127.0.0.1:1080",
+                "https": "socks5h://127.0.0.1:1080"
+            }
+        },
         "pair_whitelist": [
             "BTC/USDT", "ETH/USDT", "SOL/USDT", "BNB/USDT", "DOGE/USDT",
             "XRP/USDT", "ADA/USDT", "AVAX/USDT", "LINK/USDT", "SUI/USDT",
