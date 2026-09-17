@@ -9,57 +9,23 @@ import HistoryTable from './components/HistoryTable';
 import ScannerTab from './components/ScannerTab';
 import AiInsightsTab from './components/AiInsightsTab';
 
-const DEFAULT_PAIRS = [
-  "BTC/USDT", "ETH/USDT", "SOL/USDT", "BNB/USDT", "DOGE/USDT",
-  "XRP/USDT", "ADA/USDT", "AVAX/USDT", "LINK/USDT", "SUI/USDT",
-  "NEAR/USDT", "DOT/USDT", "APT/USDT", "PEPE/USDT", "SHIB/USDT",
-  "LTC/USDT", "BCH/USDT", "UNI/USDT", "FET/USDT", "RENDER/USDT",
-  "INJ/USDT", "TIA/USDT", "STX/USDT", "OP/USDT", "ARB/USDT",
-  "WIF/USDT", "FLOKI/USDT", "ATOM/USDT", "FIL/USDT"
-];
-
-const MOCK_FALLBACK_TRADES = [
-  {
-    id: 101,
-    pair: "BTC/USDT",
-    stake_amount: 50.00,
-    open_rate: 64150.20,
-    current_rate: 64520.80,
-    slippage_pct: 0.042,
-    slippage_usd: 0.021,
-    fee_usd: 0.037,
-    pnl: 2.88,
-    pnl_pct: 5.76
-  },
-  {
-    id: 102,
-    pair: "SOL/USDT",
-    stake_amount: 50.00,
-    open_rate: 142.10,
-    current_rate: 145.60,
-    slippage_pct: 0.038,
-    slippage_usd: 0.019,
-    fee_usd: 0.038,
-    pnl: 1.23,
-    pnl_pct: 2.46
-  }
-];
-
 export default function App() {
   const [activeTab, setActiveTab] = useState('console');
   const [selectedPair, setSelectedPair] = useState("BTC/USDT");
   const [collapsed, setCollapsed] = useState(false);
   const [apiConnected, setApiConnected] = useState(true);
 
-  // Dynamic Telemetry State
+  // 100% Real-time Telemetry State from Freqtrade Engine
   const [balance, setBalance] = useState(200.00);
-  const [totalPnl, setTotalPnl] = useState(8.45);
-  const [winRate, setWinRate] = useState(68.5);
-  const [openTrades, setOpenTrades] = useState(MOCK_FALLBACK_TRADES);
+  const [totalPnl, setTotalPnl] = useState(0.00);
+  const [winRate, setWinRate] = useState(0.0);
+  const [openTrades, setOpenTrades] = useState([]);
   const [closedTrades, setClosedTrades] = useState([]);
-  const [dynamicPairs, setDynamicPairs] = useState(DEFAULT_PAIRS);
+  const [dynamicPairs, setDynamicPairs] = useState([
+    "BTC/USDT", "ETH/USDT", "SOL/USDT", "XRP/USDT", "DOGE/USDT", "BNB/USDT"
+  ]);
 
-  // 1. Poll Freqtrade REST API
+  // Pure 100% Live REST API Sync with Freqtrade Daemon
   useEffect(() => {
     let isMounted = true;
     const authHeader = 'Basic ' + btoa('freqtrader:SuperSecretPassword123!');
@@ -67,7 +33,7 @@ export default function App() {
 
     const fetchBotData = async () => {
       try {
-        // Balance
+        // 1. Balance
         const resBal = await fetch('/api/v1/balance', { headers: fetchHeaders });
         if (resBal.ok) {
           const dataBal = await resBal.json();
@@ -76,15 +42,15 @@ export default function App() {
           }
         }
 
-        // Open Trades
+        // 2. Live Open Trades Status
         const resStatus = await fetch('/api/v1/status', { headers: fetchHeaders });
         if (resStatus.ok) {
           const dataStatus = await resStatus.json();
-          if (isMounted && Array.isArray(dataStatus) && dataStatus.length > 0) {
+          if (isMounted && Array.isArray(dataStatus)) {
             const formattedOpen = dataStatus.map((t, idx) => ({
               id: t.trade_id || t.id || idx + 1,
               pair: t.pair,
-              stake_amount: t.stake_amount || 50.00,
+              stake_amount: t.stake_amount || 45.00,
               open_rate: t.open_rate || t.open_price || 0,
               current_rate: t.current_rate || t.open_rate || 0,
               slippage_pct: t.slippage_pct || 0.04,
@@ -97,17 +63,17 @@ export default function App() {
           }
         }
 
-        // Overall Profit
+        // 3. Realized Profit & Win Rate
         const resProfit = await fetch('/api/v1/profit', { headers: fetchHeaders });
         if (resProfit.ok) {
           const dataProfit = await resProfit.json();
-          if (isMounted && dataProfit.profit_closed_coin !== undefined) {
-            if (dataProfit.profit_closed_coin !== 0) setTotalPnl(dataProfit.profit_closed_coin);
-            if (dataProfit.winrate !== undefined && dataProfit.winrate > 0) setWinRate((dataProfit.winrate || 0) * 100);
+          if (isMounted) {
+            setTotalPnl(dataProfit.profit_closed_coin || 0);
+            setWinRate((dataProfit.winrate || 0) * 100);
           }
         }
 
-        // Closed Trades
+        // 4. Closed Trades History
         const resTrades = await fetch('/api/v1/trades', { headers: fetchHeaders });
         if (resTrades.ok) {
           const dataTrades = await resTrades.json();
@@ -117,7 +83,7 @@ export default function App() {
           }
         }
 
-        // Dynamic Whitelist Pairs
+        // 5. Dynamic Whitelist Pairs (Top 30 Volume Real-time)
         const resWhitelist = await fetch('/api/v1/whitelist', { headers: fetchHeaders });
         if (resWhitelist.ok) {
           const dataWl = await resWhitelist.json();
@@ -134,38 +100,12 @@ export default function App() {
     };
 
     fetchBotData();
-    const interval = setInterval(fetchBotData, 3000);
+    const interval = setInterval(fetchBotData, 2500);
 
     return () => {
       isMounted = false;
       clearInterval(interval);
     };
-  }, []);
-
-  // 2. Realtime Price & PnL Fluctuation Animation (Live Dynamic Ticker)
-  useEffect(() => {
-    const liveTicker = setInterval(() => {
-      setOpenTrades(prevTrades =>
-        prevTrades.map(trade => {
-          const changePct = (Math.random() - 0.48) * 0.0015; // Realistic micro tick
-          const newCurrentRate = Math.max(0.0001, trade.current_rate * (1 + changePct));
-          const pnlVal = (newCurrentRate - trade.open_rate) * (trade.stake_amount / trade.open_rate);
-          const pnlPct = ((newCurrentRate - trade.open_rate) / trade.open_rate) * 100;
-          const slippagePct = Math.max(0.015, trade.slippage_pct + (Math.random() - 0.5) * 0.005);
-
-          return {
-            ...trade,
-            current_rate: newCurrentRate,
-            pnl: pnlVal,
-            pnl_pct: pnlPct,
-            slippage_pct: slippagePct,
-            slippage_usd: (trade.stake_amount * slippagePct) / 100
-          };
-        })
-      );
-    }, 1500);
-
-    return () => clearInterval(liveTicker);
   }, []);
 
   const heldPairs = openTrades.map(t => t.pair);
@@ -179,15 +119,15 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--binance-bg)' }}>
       {/* Frozen Fixed Left Sidebar */}
-      <Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        collapsed={collapsed}
-        setCollapsed={setCollapsed}
+      <Sidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        collapsed={collapsed} 
+        setCollapsed={setCollapsed} 
       />
 
       {/* Main Right Content Area */}
-      <main
+      <main 
         className="main-content"
         style={{
           marginLeft: collapsed ? '50px' : '170px',
@@ -197,8 +137,8 @@ export default function App() {
         }}
       >
         {/* Header Bar */}
-        <Header
-          selectedPair={selectedPair}
+        <Header 
+          selectedPair={selectedPair} 
           setSelectedPair={setSelectedPair}
           pairs={combinedPairs}
           heldPairs={heldPairs}
@@ -208,11 +148,11 @@ export default function App() {
         />
 
         {/* Full Width Metric Strip */}
-        <StatCards
-          balance={balance}
-          activeTradesCount={openTrades.length}
-          maxTrades={4}
-          totalPnl={totalPnl}
+        <StatCards 
+          balance={balance} 
+          activeTradesCount={openTrades.length} 
+          maxTrades={4} 
+          totalPnl={totalPnl} 
           winRate={winRate}
         />
 
@@ -228,24 +168,24 @@ export default function App() {
 
         {/* PAGE 2: Active Positions & Slippage Table */}
         {activeTab === 'positions' && (
-          <PositionsTable
-            openTrades={openTrades}
+          <PositionsTable 
+            openTrades={openTrades} 
             onSelectPair={handleSelectPairAndSwitchTab}
           />
         )}
 
         {/* PAGE 3: Completed Trade History Table */}
         {activeTab === 'history' && (
-          <HistoryTable
-            closedTrades={closedTrades}
+          <HistoryTable 
+            closedTrades={closedTrades} 
             onSelectPair={handleSelectPairAndSwitchTab}
           />
         )}
 
         {/* PAGE 4: Dynamic Top 30 Market Scanner */}
         {activeTab === 'scanner' && (
-          <ScannerTab
-            pairs={dynamicPairs}
+          <ScannerTab 
+            pairs={dynamicPairs} 
             onSelectPair={handleSelectPairAndSwitchTab}
           />
         )}
