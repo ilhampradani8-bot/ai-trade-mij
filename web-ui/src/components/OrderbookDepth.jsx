@@ -44,7 +44,16 @@ export default function OrderbookDepth({ symbol }) {
     };
 
     return () => {
-      if (ws) ws.close();
+      if (ws) {
+        ws.onmessage = null;
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.close();
+        } else if (ws.readyState === WebSocket.CONNECTING) {
+          ws.onopen = () => {
+            try { ws.close(); } catch(e) {}
+          };
+        }
+      }
     };
   }, [symbol]);
 
