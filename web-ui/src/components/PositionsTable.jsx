@@ -10,7 +10,7 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
           <h3 style={{ fontSize: '0.8rem', fontWeight: 700 }}>Active Positions & Slippage</h3>
         </div>
         <span className="badge-binance badge-yellow" style={{ fontSize: '0.65rem' }}>
-          Max 3 Trades ($50)
+          Max 4 Trades ($45)
         </span>
       </div>
 

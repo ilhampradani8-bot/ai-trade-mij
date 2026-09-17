@@ -145,7 +145,7 @@ export default function App() {
   // 2. Realtime Price & PnL Fluctuation Animation (Live Dynamic Ticker)
   useEffect(() => {
     const liveTicker = setInterval(() => {
-      setOpenTrades(prevTrades => 
+      setOpenTrades(prevTrades =>
         prevTrades.map(trade => {
           const changePct = (Math.random() - 0.48) * 0.0015; // Realistic micro tick
           const newCurrentRate = Math.max(0.0001, trade.current_rate * (1 + changePct));
@@ -179,15 +179,15 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--binance-bg)' }}>
       {/* Frozen Fixed Left Sidebar */}
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        collapsed={collapsed} 
-        setCollapsed={setCollapsed} 
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
       />
 
       {/* Main Right Content Area */}
-      <main 
+      <main
         className="main-content"
         style={{
           marginLeft: collapsed ? '50px' : '170px',
@@ -197,8 +197,8 @@ export default function App() {
         }}
       >
         {/* Header Bar */}
-        <Header 
-          selectedPair={selectedPair} 
+        <Header
+          selectedPair={selectedPair}
           setSelectedPair={setSelectedPair}
           pairs={combinedPairs}
           heldPairs={heldPairs}
@@ -208,11 +208,11 @@ export default function App() {
         />
 
         {/* Full Width Metric Strip */}
-        <StatCards 
-          balance={balance} 
-          activeTradesCount={openTrades.length} 
-          maxTrades={3} 
-          totalPnl={totalPnl} 
+        <StatCards
+          balance={balance}
+          activeTradesCount={openTrades.length}
+          maxTrades={4}
+          totalPnl={totalPnl}
           winRate={winRate}
         />
 
@@ -228,24 +228,24 @@ export default function App() {
 
         {/* PAGE 2: Active Positions & Slippage Table */}
         {activeTab === 'positions' && (
-          <PositionsTable 
-            openTrades={openTrades} 
+          <PositionsTable
+            openTrades={openTrades}
             onSelectPair={handleSelectPairAndSwitchTab}
           />
         )}
 
         {/* PAGE 3: Completed Trade History Table */}
         {activeTab === 'history' && (
-          <HistoryTable 
-            closedTrades={closedTrades} 
+          <HistoryTable
+            closedTrades={closedTrades}
             onSelectPair={handleSelectPairAndSwitchTab}
           />
         )}
 
         {/* PAGE 4: Dynamic Top 30 Market Scanner */}
         {activeTab === 'scanner' && (
-          <ScannerTab 
-            pairs={dynamicPairs} 
+          <ScannerTab
+            pairs={dynamicPairs}
             onSelectPair={handleSelectPairAndSwitchTab}
           />
         )}

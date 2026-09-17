@@ -1,7 +1,7 @@
 {
-    "max_open_trades": 3,
+    "max_open_trades": 4,
     "stake_currency": "USDT",
-    "stake_amount": 50,
+    "stake_amount": 45,
     "tradable_balance_ratio": 0.99,
     "fiat_display_currency": "USD",
     "dry_run": true,
@@ -81,7 +81,9 @@
         "listen_ip_address": "127.0.0.1",
         "listen_port": 8080,
         "verbosity": "info",
-        "CORS_origins": ["*"],
+        "CORS_origins": [
+            "*"
+        ],
         "username": "freqtrader",
         "password": "SuperSecretPassword123!",
         "jwt_secret_key": "ai-trade-2-custom-jwt-secret-key-998877"
@@ -96,9 +98,18 @@
         "backtest_period_days": 7,
         "identifier": "freqai_sb3_rl",
         "feature_parameters": {
-            "include_timeframes": ["5m", "15m"],
-            "include_corr_pairlist": ["BTC/USDT", "ETH/USDT"],
-            "indicator_periods_candles": [10, 20],
+            "include_timeframes": [
+                "5m",
+                "15m"
+            ],
+            "include_corr_pairlist": [
+                "BTC/USDT",
+                "ETH/USDT"
+            ],
+            "indicator_periods_candles": [
+                10,
+                20
+            ],
             "label_period_candles": 12,
             "include_shifted_candles": 2,
             "DI_threshold": 0,

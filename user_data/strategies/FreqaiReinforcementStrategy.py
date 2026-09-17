@@ -110,8 +110,8 @@ class FreqaiReinforcementStrategy(IStrategy):
         Entry signals based on FreqAI model prediction
         """
         enter_long_conditions = [
-            # FreqAI prediction is positive (target return > 0.008 i.e. > 0.8% expected return)
-            dataframe['&-target'] > 0.008,
+            # FreqAI prediction is positive (target return > 0.004 i.e. > 0.4% expected return)
+            dataframe['&-target'] > 0.004,
             # Data is valid & not outlier
             dataframe['do_predict'] == 1,
             dataframe['volume'] > 0
