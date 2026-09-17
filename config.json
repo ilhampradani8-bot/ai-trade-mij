@@ -6,6 +6,7 @@
     "fiat_display_currency": "USD",
     "dry_run": true,
     "dry_run_wallet": 200,
+    "stoploss": -0.05,
     "cancel_open_orders_on_exit": false,
     "trading_mode": "spot",
     "margin_mode": "",
@@ -43,19 +44,31 @@
                 "https": "socks5h://127.0.0.1:1080"
             }
         },
-        "pair_whitelist": [
-            "BTC/USDT", "ETH/USDT", "SOL/USDT", "BNB/USDT", "DOGE/USDT",
-            "XRP/USDT", "ADA/USDT", "AVAX/USDT", "LINK/USDT", "SUI/USDT",
-            "NEAR/USDT", "DOT/USDT", "APT/USDT", "PEPE/USDT", "SHIB/USDT",
-            "LTC/USDT", "BCH/USDT", "UNI/USDT", "FET/USDT", "RENDER/USDT",
-            "INJ/USDT", "TIA/USDT", "STX/USDT", "OP/USDT", "ARB/USDT",
-            "WIF/USDT", "FLOKI/USDT", "ATOM/USDT", "FIL/USDT"
-        ],
-        "pair_blacklist": []
+        "pair_whitelist": [],
+        "pair_blacklist": [
+            "(USDC|BUSD|TUSD|FDUSD|DAI|EUR|GBP)/.*",
+            ".*(USDC|BUSD|TUSD|FDUSD|DAI|EUR|GBP).*",
+            ".*(3L|3S|5L|5S|BEAR|BULL)/.*"
+        ]
     },
     "pairlists": [
         {
-            "method": "StaticPairList"
+            "method": "VolumePairList",
+            "number_assets": 30,
+            "sort_key": "quoteVolume",
+            "min_value_0": 5000000,
+            "refresh_period": 1800
+        },
+        {
+            "method": "AgeFilter",
+            "min_days_listed": 7
+        },
+        {
+            "method": "PrecisionFilter"
+        },
+        {
+            "method": "PriceFilter",
+            "low_price_ratio": 0.001
         }
     ],
     "telegram": {
