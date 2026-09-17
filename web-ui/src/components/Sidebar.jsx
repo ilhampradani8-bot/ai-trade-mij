@@ -1,10 +1,11 @@
 import React from 'react';
-import { Menu, LayoutDashboard, Layers, BrainCircuit, Search, ChevronLeft } from 'lucide-react';
+import { Menu, LayoutDashboard, Layers, BrainCircuit, Search, History, ChevronLeft } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollapsed }) {
   const pages = [
     { id: 'console', label: 'Trading Console', shortLabel: 'Chart', icon: LayoutDashboard },
     { id: 'positions', label: 'Positions & Slippage', shortLabel: 'Positions', icon: Layers },
+    { id: 'history', label: 'Trade History', shortLabel: 'History', icon: History },
     { id: 'scanner', label: 'Market Scanner', shortLabel: 'Scanner', icon: Search },
     { id: 'insights', label: 'AI Models', shortLabel: 'AI', icon: BrainCircuit }
   ];
