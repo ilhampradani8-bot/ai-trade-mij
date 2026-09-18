@@ -3,7 +3,7 @@ import { Menu, LayoutDashboard, Layers, BrainCircuit, Search, History, ChevronLe
 
 export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollapsed }) {
   const pages = [
-    { id: 'console', label: 'Trading Console', shortLabel: 'Chart', icon: LayoutDashboard },
+    { id: 'console', label: 'Trading Console', shortLabel: 'Console', icon: LayoutDashboard },
     { id: 'positions', label: 'Positions & Slippage', shortLabel: 'Positions', icon: Layers },
     { id: 'history', label: 'Trade History', shortLabel: 'History', icon: History },
     { id: 'scanner', label: 'Market Scanner', shortLabel: 'Scanner', icon: Search },
@@ -33,6 +33,12 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
             >
               {collapsed ? <Menu size={18} /> : <ChevronLeft size={18} />}
             </button>
+            {!collapsed && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginRight: '4px' }}>
+                <img src="/mij.png" alt="Logo" style={{ width: '20px', height: '20px', borderRadius: '3px', objectFit: 'contain' }} />
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--binance-yellow)' }}>MIJ AI</span>
+              </div>
+            )}
           </div>
 
           {/* Desktop Navigation Pages */}

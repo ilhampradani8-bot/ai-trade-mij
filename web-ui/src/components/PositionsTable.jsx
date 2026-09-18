@@ -10,7 +10,7 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
           <h3 style={{ fontSize: '0.8rem', fontWeight: 700 }}>Active Positions & Slippage</h3>
         </div>
         <span className="badge-binance badge-yellow" style={{ fontSize: '0.65rem' }}>
-          Max 4 Trades ($45)
+          Max 4 Trades (Dynamic Tier Stake)
         </span>
       </div>
 
@@ -77,7 +77,7 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
             ) : (
               <tr>
                 <td colSpan="9" style={{ textAlign: 'center', color: 'var(--binance-text-muted)', padding: '16px' }}>
-                  No active open positions. FreqAI RL scanning 30 pairs...
+                  No active open positions. CatBoost AI scanning 30 dynamic volume pairs...
                 </td>
               </tr>
             )}

@@ -5,9 +5,9 @@ export default function StatCards({ balance, activeTradesCount, maxTrades, total
 
   return (
     <div className="binance-panel stat-strip" style={{ marginBottom: '8px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', padding: '6px 12px' }}>
-      {/* Simulation Balance */}
+      {/* Wallet Balance */}
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span style={{ fontSize: '0.65rem', color: 'var(--binance-text-secondary)', fontWeight: 600 }}>SIMULATION BALANCE</span>
+        <span style={{ fontSize: '0.65rem', color: 'var(--binance-text-secondary)', fontWeight: 600 }}>BALANCE</span>
         <div className="mono" style={{ fontSize: '1rem', fontWeight: 700, color: '#fff' }}>
           ${balance.toFixed(2)} <span style={{ fontSize: '0.7rem', color: 'var(--binance-text-muted)' }}>USDT</span>
         </div>
@@ -29,11 +29,11 @@ export default function StatCards({ balance, activeTradesCount, maxTrades, total
         </div>
       </div>
 
-      {/* Win Rate SB3 */}
+      {/* Win Rate */}
       <div style={{ display: 'flex', flexDirection: 'column', borderLeft: '1px solid var(--binance-border)', paddingLeft: '8px' }}>
-        <span style={{ fontSize: '0.65rem', color: 'var(--binance-text-secondary)', fontWeight: 600 }}>SB3 WIN RATE</span>
+        <span style={{ fontSize: '0.65rem', color: 'var(--binance-text-secondary)', fontWeight: 600 }}>WIN RATE</span>
         <div className="mono" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--binance-yellow)' }}>
-          {winRate.toFixed(1)}% <span style={{ fontSize: '0.7rem', color: 'var(--binance-text-muted)' }}>PPO Agent</span>
+          {winRate.toFixed(1)}%
         </div>
       </div>
     </div>

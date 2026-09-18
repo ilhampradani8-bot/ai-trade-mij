@@ -1,12 +1,12 @@
 {
-    "max_open_trades": 4,
+    "max_open_trades": 12,
     "stake_currency": "USDT",
-    "stake_amount": 45,
+    "stake_amount": "unlimited",
     "tradable_balance_ratio": 0.99,
     "fiat_display_currency": "USD",
     "dry_run": true,
-    "dry_run_wallet": 200,
-    "stoploss": -0.05,
+    "dry_run_wallet": 1000,
+    "stoploss": -0.025,
     "cancel_open_orders_on_exit": false,
     "trading_mode": "spot",
     "margin_mode": "",
@@ -19,14 +19,14 @@
     "entry_pricing": {
         "price_side": "same",
         "use_order_book": true,
-        "order_book_top": 1,
+        "order_book_top": 5,
         "price_last_balance": 0.0,
-        "check_depth_of_target": false
+        "check_depth_of_target": true
     },
     "exit_pricing": {
         "price_side": "same",
         "use_order_book": true,
-        "order_book_top": 1
+        "order_book_top": 5
     },
     "exchange": {
         "name": "gate",
@@ -96,7 +96,13 @@
         "purge_old_models": true,
         "train_period_days": 15,
         "backtest_period_days": 7,
-        "identifier": "freqai_sb3_rl",
+        "identifier": "freqai_catboost",
+        "freqaimodel": "CatBoostRegressor",
+        "model_training_parameters": {
+            "iterations": 500,
+            "learning_rate": 0.05,
+            "depth": 6
+        },
         "feature_parameters": {
             "include_timeframes": [
                 "5m",

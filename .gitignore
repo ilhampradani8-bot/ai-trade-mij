@@ -31,3 +31,4 @@ freqtrade/
 # OS Junk
 .DS_Store
 Thumbs.db
+catboost_info/

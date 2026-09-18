@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import StatCards from './components/StatCards';
-import TradingChart from './components/TradingChart';
+import TierCards from './components/TierCards';
 import OrderbookDepth from './components/OrderbookDepth';
 import PositionsTable from './components/PositionsTable';
 import HistoryTable from './components/HistoryTable';
@@ -16,14 +16,23 @@ export default function App() {
   const [apiConnected, setApiConnected] = useState(true);
 
   // 100% Real-time Telemetry State from Freqtrade Engine
-  const [balance, setBalance] = useState(200.00);
+  const [balance, setBalance] = useState(1000.00);
   const [totalPnl, setTotalPnl] = useState(0.00);
   const [winRate, setWinRate] = useState(0.0);
   const [openTrades, setOpenTrades] = useState([]);
   const [closedTrades, setClosedTrades] = useState([]);
+  const [uptimeSeconds, setUptimeSeconds] = useState(0);
   const [dynamicPairs, setDynamicPairs] = useState([
     "BTC/USDT", "ETH/USDT", "SOL/USDT", "XRP/USDT", "DOGE/USDT", "BNB/USDT"
   ]);
+
+  // 1-second Uptime Timer Counter
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setUptimeSeconds(prev => prev + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Pure 100% Live REST API Sync with Freqtrade Daemon
   useEffect(() => {
@@ -42,28 +51,44 @@ export default function App() {
           }
         }
 
-        // 2. Live Open Trades Status
+        // 2. Dynamic Whitelist Pairs (Top 30 Volume Real-time)
+        let currentWhitelist = dynamicPairs;
+        const resWhitelist = await fetch('/api/v1/whitelist', { headers: fetchHeaders });
+        if (resWhitelist.ok) {
+          const dataWl = await resWhitelist.json();
+          if (isMounted && dataWl.whitelist && Array.isArray(dataWl.whitelist) && dataWl.whitelist.length > 0) {
+            setDynamicPairs(dataWl.whitelist);
+            currentWhitelist = dataWl.whitelist;
+          }
+        }
+
+        // 3. Live Open Trades Status
         const resStatus = await fetch('/api/v1/status', { headers: fetchHeaders });
         if (resStatus.ok) {
           const dataStatus = await resStatus.json();
           if (isMounted && Array.isArray(dataStatus)) {
-            const formattedOpen = dataStatus.map((t, idx) => ({
-              id: t.trade_id || t.id || idx + 1,
-              pair: t.pair,
-              stake_amount: t.stake_amount || 45.00,
-              open_rate: t.open_rate || t.open_price || 0,
-              current_rate: t.current_rate || t.open_rate || 0,
-              slippage_pct: t.slippage_pct || 0.04,
-              slippage_usd: t.slippage_usd || 0.02,
-              fee_usd: t.fee_open_cost || 0.038,
-              pnl: t.profit_abs || 0,
-              pnl_pct: (t.profit_pct || 0) * 100
-            }));
+            const formattedOpen = dataStatus.map((t, idx) => {
+              const r = currentWhitelist.indexOf(t.pair);
+              const rankVal = r >= 0 ? r + 1 : 99;
+              return {
+                id: t.trade_id || t.id || idx + 1,
+                pair: t.pair,
+                rank: rankVal,
+                stake_amount: t.stake_amount || (rankVal <= 10 ? 160.0 : rankVal <= 20 ? 55.0 : 35.0),
+                open_rate: t.open_rate || t.open_price || 0,
+                current_rate: t.current_rate || t.open_rate || 0,
+                slippage_pct: t.slippage_pct || 0.04,
+                slippage_usd: t.slippage_usd || 0.02,
+                fee_usd: t.fee_open_cost || 0.038,
+                pnl: t.profit_abs || 0,
+                pnl_pct: (t.profit_pct || 0) * 100
+              };
+            });
             setOpenTrades(formattedOpen);
           }
         }
 
-        // 3. Realized Profit & Win Rate
+        // 4. Realized Profit & Win Rate
         const resProfit = await fetch('/api/v1/profit', { headers: fetchHeaders });
         if (resProfit.ok) {
           const dataProfit = await resProfit.json();
@@ -73,22 +98,13 @@ export default function App() {
           }
         }
 
-        // 4. Closed Trades History
+        // 5. Closed Trades History
         const resTrades = await fetch('/api/v1/trades', { headers: fetchHeaders });
         if (resTrades.ok) {
           const dataTrades = await resTrades.json();
           if (isMounted && dataTrades.trades && Array.isArray(dataTrades.trades)) {
             const closedOnly = dataTrades.trades.filter(t => !t.is_open);
             setClosedTrades(closedOnly);
-          }
-        }
-
-        // 5. Dynamic Whitelist Pairs (Top 30 Volume Real-time)
-        const resWhitelist = await fetch('/api/v1/whitelist', { headers: fetchHeaders });
-        if (resWhitelist.ok) {
-          const dataWl = await resWhitelist.json();
-          if (isMounted && dataWl.whitelist && Array.isArray(dataWl.whitelist) && dataWl.whitelist.length > 0) {
-            setDynamicPairs(dataWl.whitelist);
           }
         }
 
@@ -138,30 +154,33 @@ export default function App() {
       >
         {/* Header Bar */}
         <Header 
-          selectedPair={selectedPair} 
-          setSelectedPair={setSelectedPair}
-          pairs={combinedPairs}
-          heldPairs={heldPairs}
           apiConnected={apiConnected}
           collapsed={collapsed}
           setCollapsed={setCollapsed}
+          uptimeSeconds={uptimeSeconds}
         />
 
         {/* Full Width Metric Strip */}
         <StatCards 
           balance={balance} 
           activeTradesCount={openTrades.length} 
-          maxTrades={4} 
+          maxTrades={12} 
           totalPnl={totalPnl} 
           winRate={winRate}
         />
+
+        {/* Dynamic Tier Allocation Cards */}
+        <TierCards openTrades={openTrades} />
 
         {/* MODULAR PAGE VIEWS */}
 
         {/* PAGE 1: Trading Console View */}
         {activeTab === 'console' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '2.4fr 1fr', gap: '8px' }} className="desktop-grid">
-            <TradingChart symbol={selectedPair} />
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr', gap: '8px' }} className="desktop-grid">
+            <PositionsTable 
+              openTrades={openTrades} 
+              onSelectPair={handleSelectPairAndSwitchTab}
+            />
             <OrderbookDepth symbol={selectedPair} />
           </div>
         )}

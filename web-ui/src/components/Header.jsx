@@ -1,13 +1,25 @@
 import React from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, Clock } from 'lucide-react';
 
-export default function Header({ selectedPair, setSelectedPair, pairs, heldPairs, apiConnected, collapsed, setCollapsed }) {
+function formatUptime(totalSeconds) {
+  if (!totalSeconds || totalSeconds < 0) return '0m 00s';
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+  const secs = totalSeconds % 60;
+
+  if (days > 0) return `${days}d ${hours}h ${mins}m`;
+  if (hours > 0) return `${hours}h ${mins}m ${String(secs).padStart(2, '0')}s`;
+  return `${mins}m ${String(secs).padStart(2, '0')}s`;
+}
+
+export default function Header({ apiConnected, collapsed, setCollapsed, uptimeSeconds = 0 }) {
   return (
-    <header className="binance-panel" style={{ padding: '4px 8px', marginBottom: '6px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '6px', width: '100%' }}>
-        {/* Toggle Hamburger & Dropdown Coin Selector */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flex: 1 }}>
-          <button 
+    <header className="binance-panel" style={{ padding: '6px 10px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+        {/* Toggle & Title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button
             onClick={() => setCollapsed(!collapsed)}
             title="Toggle Menu"
             className="hide-on-mobile"
@@ -24,41 +36,30 @@ export default function Header({ selectedPair, setSelectedPair, pairs, heldPairs
           >
             <Menu size={16} />
           </button>
-
-          <label style={{ fontSize: '0.7rem', color: 'var(--binance-text-secondary)', fontWeight: 600, whiteSpace: 'nowrap' }}>Chart Coin:</label>
-          <select 
-            value={selectedPair} 
-            onChange={(e) => setSelectedPair(e.target.value)}
-            className="mono"
-            style={{
-              background: '#12161c',
-              color: 'var(--binance-yellow)',
-              border: '1px solid var(--binance-yellow)',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              outline: 'none',
-              fontSize: '0.8rem',
-              width: '100%',
-              maxWidth: '220px'
-            }}
-          >
-            {pairs.map(p => {
-              const isHeld = heldPairs.includes(p);
-              return (
-                <option key={p} value={p} style={{ background: '#181a20', color: isHeld ? '#0ecb81' : '#fff', fontWeight: isHeld ? 'bold' : 'normal' }}>
-                  {p} {isHeld ? '💼 (HELD)' : ''}
-                </option>
-              );
-            })}
-          </select>
+          <img src="/mij.png" alt="Logo" style={{ width: '22px', height: '22px', borderRadius: '4px', objectFit: 'contain' }} />
+          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--binance-text)' }}>
+            Trading Console
+          </span>
         </div>
 
-        {/* REST Status */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.68rem', color: 'var(--binance-text-secondary)', whiteSpace: 'nowrap' }}>
-          <div className={apiConnected ? "pulse-green" : ""} style={{ width: 6, height: 6, borderRadius: '50%', background: apiConnected ? 'var(--binance-green)' : 'var(--binance-red)' }} />
-          <span>{apiConnected ? "Connected" : "Offline"}</span>
+        {/* Dynamic API Status & Bot Uptime */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.7rem' }}>
+          {/* Active Uptime Duration Badge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#12161c', padding: '3px 8px', borderRadius: '4px', border: '1px solid var(--binance-border)' }}>
+            <Clock size={12} color="var(--binance-yellow)" />
+            <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.65rem' }}>Active:</span>
+            <span className="mono" style={{ color: 'var(--binance-yellow)', fontWeight: 700, fontSize: '0.7rem' }}>
+              {formatUptime(uptimeSeconds)}
+            </span>
+          </div>
+
+          {/* Connection Status Indicator */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div className={apiConnected ? "pulse-green" : ""} style={{ width: 6, height: 6, borderRadius: '50%', background: apiConnected ? 'var(--binance-green)' : 'var(--binance-red)' }} />
+            <span style={{ color: apiConnected ? 'var(--binance-green)' : 'var(--binance-red)', fontWeight: 600 }}>
+              {apiConnected ? 'Connected' : 'Offline'}
+            </span>
+          </div>
         </div>
       </div>
     </header>

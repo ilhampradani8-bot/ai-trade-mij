@@ -27,6 +27,8 @@ body {
   line-height: 1.35;
   font-size: 0.78rem;
   -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
 }
 
 .mono {
