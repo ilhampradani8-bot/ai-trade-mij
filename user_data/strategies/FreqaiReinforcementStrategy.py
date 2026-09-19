@@ -42,8 +42,8 @@ class FreqaiReinforcementStrategy(IStrategy):
     exit_profit_only = False
     ignore_roi_if_entry_signal = False
 
-    # Startup candle count required for FreqAI feature engineering (15 days = 4320 5m candles)
-    startup_candle_count: int = 4320
+    # Startup candle count required for FreqAI feature engineering (500 5m candles = ~1.7 days)
+    startup_candle_count: int = 500
 
     def custom_stake_amount(self, pair: str, current_time, current_rate: float,
                             proposed_stake: float, min_stake: float | None, max_stake: float,
@@ -249,8 +249,8 @@ class FreqaiReinforcementStrategy(IStrategy):
         Entry signals based on FreqAI model prediction
         """
         enter_long_conditions = [
-            # FreqAI prediction target return > 0.0035 (expected > +0.35% return over 12 candles)
-            dataframe['&-target'] > 0.0035,
+            # FreqAI prediction target return > 0.0025 (expected > +0.25% return over 12 candles)
+            dataframe['&-target'] > 0.0025,
             # Data is valid & not outlier
             dataframe['do_predict'] == 1,
             dataframe['volume'] > 0

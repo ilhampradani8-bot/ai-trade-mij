@@ -94,8 +94,8 @@
     "freqai": {
         "enabled": true,
         "purge_old_models": true,
-        "train_period_days": 15,
-        "backtest_period_days": 7,
+        "train_period_days": 2,
+        "backtest_period_days": 1,
         "identifier": "freqai_catboost",
         "freqaimodel": "CatBoostRegressor",
         "model_training_parameters": {
