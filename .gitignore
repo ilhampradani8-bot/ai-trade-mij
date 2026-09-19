@@ -32,3 +32,5 @@ freqtrade/
 .DS_Store
 Thumbs.db
 catboost_info/
+bot_start.json
+web-ui/public/bot_start.json

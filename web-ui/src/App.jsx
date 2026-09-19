@@ -21,18 +21,47 @@ export default function App() {
   const [winRate, setWinRate] = useState(0.0);
   const [openTrades, setOpenTrades] = useState([]);
   const [closedTrades, setClosedTrades] = useState([]);
-  const [uptimeSeconds, setUptimeSeconds] = useState(0);
+  const [botStartTimestamp, setBotStartTimestamp] = useState(null);
+  const [nowTimestamp, setNowTimestamp] = useState(Date.now());
   const [dynamicPairs, setDynamicPairs] = useState([
     "BTC/USDT", "ETH/USDT", "SOL/USDT", "XRP/USDT", "DOGE/USDT", "BNB/USDT"
   ]);
 
-  // 1-second Uptime Timer Counter
+  // Fetch real machine bot process start timestamp
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBotStart = async () => {
+      try {
+        const res = await fetch('/bot_start.json?t=' + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && data.bot_start_timestamp) {
+            setBotStartTimestamp(data.bot_start_timestamp);
+          }
+        }
+      } catch (e) {
+        console.warn('Could not fetch bot start timestamp:', e);
+      }
+    };
+    fetchBotStart();
+    const interval = setInterval(fetchBotStart, 10000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // 1-second Clock Ticker
   useEffect(() => {
     const timer = setInterval(() => {
-      setUptimeSeconds(prev => prev + 1);
+      setNowTimestamp(Date.now());
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  const uptimeSeconds = botStartTimestamp 
+    ? Math.max(0, Math.floor((nowTimestamp - botStartTimestamp) / 1000)) 
+    : 0;
 
   // Pure 100% Live REST API Sync with Freqtrade Daemon
   useEffect(() => {

@@ -229,8 +229,13 @@ class FreqaiReinforcementStrategy(IStrategy):
         """
         Populates indicators and executes FreqAI feature pipeline.
         """
-        # FreqAI feature population
-        dataframe = self.freqai.start(dataframe, metadata, self)
+        try:
+            # FreqAI feature population
+            dataframe = self.freqai.start(dataframe, metadata, self)
+        except Exception as e:
+            logger.warning(f"FreqAI calculation skipped for pair {metadata.get('pair')}: {e}")
+            dataframe['&-target'] = 0.0
+            dataframe['do_predict'] = 0
 
         # Basic indicators for fallback / confirmation
         dataframe['rsi'] = ta.RSI(dataframe, timeperiod=14)
