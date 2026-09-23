@@ -3,7 +3,6 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import StatCards from './components/StatCards';
 import TierCards from './components/TierCards';
-import OrderbookDepth from './components/OrderbookDepth';
 import PositionsTable from './components/PositionsTable';
 import HistoryTable from './components/HistoryTable';
 import ScannerTab from './components/ScannerTab';
@@ -214,20 +213,10 @@ export default function App() {
 
         {/* PAGE 1: Trading Console View */}
         {activeTab === 'console' && (
-          <div 
-            style={{ 
-              display: 'grid', 
-              gridTemplateColumns: isMobile ? '1fr' : '2fr 1.2fr', 
-              gap: '8px' 
-            }} 
-            className="desktop-grid"
-          >
-            <PositionsTable 
-              openTrades={openTrades} 
-              onSelectPair={handleSelectPairAndSwitchTab}
-            />
-            <OrderbookDepth symbol={selectedPair} />
-          </div>
+          <PositionsTable 
+            openTrades={openTrades} 
+            onSelectPair={handleSelectPairAndSwitchTab}
+          />
         )}
 
         {/* PAGE 2: Active Positions & Slippage Table */}

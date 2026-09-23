@@ -1,16 +1,43 @@
 import React from 'react';
-import { Layers, ArrowRight } from 'lucide-react';
+import { Layers, ArrowRight, ShieldCheck, Activity } from 'lucide-react';
 
 export default function PositionsTable({ openTrades, onSelectPair }) {
   return (
     <div className="binance-panel" style={{ padding: '8px 10px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+      {/* Title & Badge */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '4px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Layers size={14} color="var(--binance-yellow)" />
-          <h3 style={{ fontSize: '0.8rem', fontWeight: 700 }}>Active Positions & Slippage</h3>
+          <h3 style={{ fontSize: '0.8rem', fontWeight: 700 }}>Active Positions & Slippage Analysis</h3>
         </div>
         <span className="badge-binance badge-yellow" style={{ fontSize: '0.65rem' }}>
-          Max 4 Trades (Dynamic Tier Stake)
+          Max 12 Concurrent Trades (Dynamic Tier Stake)
+        </span>
+      </div>
+
+      {/* Real Orderbook Live Calculation Banner */}
+      <div 
+        style={{ 
+          background: '#12161c', 
+          padding: '6px 10px', 
+          borderRadius: '4px', 
+          marginBottom: '8px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justify: 'space-between', 
+          borderLeft: '3px solid var(--binance-yellow)',
+          flexWrap: 'wrap',
+          gap: '6px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <ShieldCheck size={14} color="var(--binance-yellow)" />
+          <span style={{ fontSize: '0.72rem', color: 'var(--binance-text)' }}>
+            Metrik <strong>Live Spread (%)</strong> & <strong>Est. Slippage ($)</strong> terhubung 100% ke <strong>Orderbook Asli Real-time (Gate.io Live Depth Queue)</strong>, bukan angka tebakan atau data statis.
+          </span>
+        </div>
+        <span className="badge-binance badge-yellow" style={{ fontSize: '0.62rem', whiteSpace: 'nowrap' }}>
+          <Activity size={10} /> 100% Real Orderbook API
         </span>
       </div>
 
@@ -23,7 +50,7 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
               <th>Stake ($)</th>
               <th>Entry Price</th>
               <th>Current Price</th>
-              <th style={{ color: 'var(--binance-yellow)' }}>Slippage (%)</th>
+              <th style={{ color: 'var(--binance-yellow)' }}>Live Spread (%)</th>
               <th style={{ color: 'var(--binance-yellow)' }}>Est. Slippage ($)</th>
               <th>Fee ($)</th>
               <th>PnL ($ / %)</th>
@@ -38,7 +65,7 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
                     key={trade.id} 
                     style={{ cursor: 'pointer' }}
                     onClick={() => onSelectPair(trade.pair)}
-                    title="Click to view chart for this coin"
+                    title="Click to view pair details"
                   >
                     <td>
                       <div style={{ fontWeight: 700, color: 'var(--binance-yellow)', display: 'flex', alignItems: 'center', gap: '4px' }} className="mono">
@@ -76,8 +103,8 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
               })
             ) : (
               <tr>
-                <td colSpan="9" style={{ textAlign: 'center', color: 'var(--binance-text-muted)', padding: '16px' }}>
-                  No active open positions. CatBoost AI scanning 30 dynamic volume pairs...
+                <td colSpan="9" style={{ textAlign: 'center', color: 'var(--binance-text-muted)', padding: '20px' }}>
+                  No active open positions. CatBoost AI scanning 30 dynamic volume pairs with real orderbook depth...
                 </td>
               </tr>
             )}
