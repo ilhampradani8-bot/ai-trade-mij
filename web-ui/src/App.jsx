@@ -14,6 +14,16 @@ export default function App() {
   const [selectedPair, setSelectedPair] = useState("BTC/USDT");
   const [collapsed, setCollapsed] = useState(false);
   const [apiConnected, setApiConnected] = useState(true);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+
+  // Responsive mobile detection
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // 100% Real-time Telemetry State from Freqtrade Engine
   const [balance, setBalance] = useState(1000.00);
@@ -153,16 +163,13 @@ export default function App() {
     };
   }, []);
 
-  const heldPairs = openTrades.map(t => t.pair);
-  const combinedPairs = Array.from(new Set([...heldPairs, ...dynamicPairs]));
-
   const handleSelectPairAndSwitchTab = (pair) => {
     setSelectedPair(pair);
     setActiveTab('console');
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--binance-bg)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--binance-bg)', overflowX: 'hidden' }}>
       {/* Frozen Fixed Left Sidebar */}
       <Sidebar 
         activeTab={activeTab} 
@@ -175,10 +182,12 @@ export default function App() {
       <main 
         className="main-content"
         style={{
-          marginLeft: collapsed ? '50px' : '170px',
-          padding: '6px 10px',
+          marginLeft: isMobile ? '0px' : (collapsed ? '50px' : '170px'),
+          padding: isMobile ? '6px 6px 70px 6px' : '6px 10px',
           transition: 'margin-left 0.2s ease-in-out',
-          width: `calc(100% - ${collapsed ? '50px' : '170px'})`
+          width: isMobile ? '100%' : `calc(100% - ${collapsed ? '50px' : '170px'})`,
+          maxWidth: '100vw',
+          boxSizing: 'border-box'
         }}
       >
         {/* Header Bar */}
@@ -205,7 +214,14 @@ export default function App() {
 
         {/* PAGE 1: Trading Console View */}
         {activeTab === 'console' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr', gap: '8px' }} className="desktop-grid">
+          <div 
+            style={{ 
+              display: 'grid', 
+              gridTemplateColumns: isMobile ? '1fr' : '2fr 1.2fr', 
+              gap: '8px' 
+            }} 
+            className="desktop-grid"
+          >
             <PositionsTable 
               openTrades={openTrades} 
               onSelectPair={handleSelectPairAndSwitchTab}
