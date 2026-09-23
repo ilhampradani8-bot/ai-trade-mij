@@ -14,8 +14,8 @@ function formatTradeDateTime(dateStr, timestamp) {
   
   if (isNaN(d.getTime())) return { dayDate: dateStr || '-', timeStr: '-' };
 
-  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   const dayName = days[d.getDay()];
   const dateNum = String(d.getDate()).padStart(2, '0');
@@ -62,12 +62,12 @@ export default function HistoryTable({ closedTrades, onSelectPair }) {
               <th>Side</th>
               <th style={{ color: 'var(--binance-yellow)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Calendar size={11} /> Hari & Tanggal
+                  <Calendar size={11} /> Date & Day
                 </div>
               </th>
               <th style={{ color: 'var(--binance-yellow)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Clock size={11} /> Waktu / Jam
+                  <Clock size={11} /> Execution Time
                 </div>
               </th>
               <th>Stake ($)</th>
@@ -95,7 +95,7 @@ export default function HistoryTable({ closedTrades, onSelectPair }) {
                     key={trade.trade_id || idx} 
                     style={{ cursor: 'pointer' }}
                     onClick={() => onSelectPair(trade.pair)}
-                    title="Click to view chart for this pair"
+                    title="Click to view pair details"
                   >
                     <td>
                       <div style={{ fontWeight: 700, color: 'var(--binance-yellow)', display: 'flex', alignItems: 'center', gap: '4px' }} className="mono">

@@ -15,7 +15,7 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
         </span>
       </div>
 
-      {/* Real Orderbook Live Calculation Banner */}
+      {/* Real Orderbook Live Calculation Banner (Binance Pro English) */}
       <div 
         style={{ 
           background: '#12161c', 
@@ -33,11 +33,11 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <ShieldCheck size={14} color="var(--binance-yellow)" />
           <span style={{ fontSize: '0.72rem', color: 'var(--binance-text)' }}>
-            Metrik <strong>Live Spread (%)</strong> & <strong>Est. Slippage ($)</strong> terhubung 100% ke <strong>Orderbook Asli Real-time (Gate.io Live Depth Queue)</strong>, bukan angka tebakan atau data statis.
+            <strong>Live Spread (%)</strong> & <strong>Est. Slippage ($)</strong> metrics are 100% powered by <strong>Exchange Depth Queue (Gate.io Live Orderbook API)</strong> — zero static mocking.
           </span>
         </div>
         <span className="badge-binance badge-yellow" style={{ fontSize: '0.62rem', whiteSpace: 'nowrap' }}>
-          <Activity size={10} /> 100% Real Orderbook API
+          <Activity size={10} /> 100% Live Orderbook Stream
         </span>
       </div>
 
@@ -104,7 +104,7 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
             ) : (
               <tr>
                 <td colSpan="9" style={{ textAlign: 'center', color: 'var(--binance-text-muted)', padding: '20px' }}>
-                  No active open positions. CatBoost AI scanning 30 dynamic volume pairs with real orderbook depth...
+                  No active open positions. CatBoost AI scanning 30 dynamic volume pairs with live orderbook depth...
                 </td>
               </tr>
             )}
