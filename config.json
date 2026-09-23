@@ -48,7 +48,8 @@
         "pair_blacklist": [
             "(USDC|BUSD|TUSD|FDUSD|DAI|EUR|GBP)/.*",
             ".*(USDC|BUSD|TUSD|FDUSD|DAI|EUR|GBP).*",
-            ".*(3L|3S|5L|5S|BEAR|BULL)/.*"
+            ".*(3L|3S|5L|5S|BEAR|BULL)/.*",
+            ".*[^\\x00-\\x7F].*"
         ]
     },
     "pairlists": [
@@ -93,11 +94,11 @@
     "force_entry_enable": true,
     "freqai": {
         "enabled": true,
-        "purge_old_models": true,
+        "purge_old_models": false,
         "train_period_days": 2,
         "backtest_period_days": 1,
         "live_retrain_hours": 0.5,
-        "expiration_hours": 1,
+        "expiration_hours": 24,
         "identifier": "freqai_catboost",
         "freqaimodel": "CatBoostRegressor",
         "model_training_parameters": {
