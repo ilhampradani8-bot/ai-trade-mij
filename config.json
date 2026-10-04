@@ -46,16 +46,7 @@
                 "https": "socks5h://127.0.0.1:40000"
             }
         },
-        "pair_whitelist": [
-            "BTC/USDT",
-            "ETH/USDT",
-            "SOL/USDT",
-            "XRP/USDT",
-            "ADA/USDT",
-            "DOGE/USDT",
-            "AVAX/USDT",
-            "LINK/USDT"
-        ],
+        "pair_whitelist": [],
         "pair_blacklist": [
             ".*BNB/.*",
             ".*/UP",
