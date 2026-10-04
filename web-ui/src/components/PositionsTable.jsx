@@ -24,7 +24,7 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
           marginBottom: '8px', 
           display: 'flex', 
           alignItems: 'center', 
-          justify: 'space-between', 
+          justifyContent: 'space-between', 
           borderLeft: '3px solid var(--binance-yellow)',
           flexWrap: 'wrap',
           gap: '6px'
@@ -104,7 +104,7 @@ export default function PositionsTable({ openTrades, onSelectPair }) {
             ) : (
               <tr>
                 <td colSpan="9" style={{ textAlign: 'center', color: 'var(--binance-text-muted)', padding: '20px' }}>
-                  No active open positions. CatBoost AI scanning 30 dynamic volume pairs with live orderbook depth...
+                  No active open positions. FreqAI LightGBM scanning 30 dynamic volume pairs with live orderbook depth...
                 </td>
               </tr>
             )}

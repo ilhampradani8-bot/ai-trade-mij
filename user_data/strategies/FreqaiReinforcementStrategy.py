@@ -6,7 +6,11 @@ import talib.abstract as ta
 from pandas import DataFrame
 
 from freqtrade.strategy import IStrategy, merge_informative_pair
-import freqtrade.vendor.qtpylib.indicators as qtpylib
+from freqtrade.persistence import Trade
+try:
+    from technical import qtpylib
+except ImportError:
+    import freqtrade.vendor.qtpylib.indicators as qtpylib
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +93,8 @@ class FreqaiReinforcementStrategy(IStrategy):
         Total Max Open Trades across all pairs: 12
         """
         try:
-            open_trades = self.wallets.get_open_trades()
+            # Use Trade.get_open_trades() — correct API for Freqtrade 2026.x
+            open_trades = Trade.get_open_trades()
             whitelist = self.dp.current_whitelist()
             
             rank = 99
@@ -249,8 +254,9 @@ class FreqaiReinforcementStrategy(IStrategy):
         Entry signals based on FreqAI model prediction
         """
         enter_long_conditions = [
-            # FreqAI prediction target return > 0.0015 (expected > +0.15% return over 12 candles)
-            dataframe['&-target'] > 0.0015,
+            # FreqAI prediction target return > 0.0008 (expected > +0.08% return over 12 candles)
+            # Dilonggarkan dari 0.0015 agar lebih banyak sinyal lolos setelah DI filtering
+            dataframe['&-target'] > 0.0008,
             # Data is valid & not outlier
             dataframe['do_predict'] == 1,
             dataframe['volume'] > 0

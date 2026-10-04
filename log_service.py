@@ -42,7 +42,7 @@ def save_log(timestamp, level, module, message):
         pass
 
 def collector_loop():
-    auth = ('freqtrader', 'SuperSecretPassword123!')
+    auth = ('admin', 'password123')
     while True:
         try:
             # 1. Try to fetch logs from Freqtrade REST API

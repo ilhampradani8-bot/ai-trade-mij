@@ -1,5 +1,5 @@
-import React from 'react';
-import { Menu, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Menu, Clock, Globe } from 'lucide-react';
 
 function formatUptime(totalSeconds) {
   if (!totalSeconds || totalSeconds < 0) return '0m 00s';
@@ -14,6 +14,25 @@ function formatUptime(totalSeconds) {
 }
 
 export default function Header({ apiConnected, collapsed, setCollapsed, uptimeSeconds = 0 }) {
+  const [wibTime, setWibTime] = useState('');
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const options = {
+        timeZone: 'Asia/Jakarta',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      };
+      setWibTime(new Intl.DateTimeFormat('id-ID', options).format(now) + ' WIB');
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <header className="binance-panel" style={{ padding: '6px 10px', marginBottom: '8px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
@@ -42,8 +61,16 @@ export default function Header({ apiConnected, collapsed, setCollapsed, uptimeSe
           </span>
         </div>
 
-        {/* Dynamic API Status & Bot Uptime */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.7rem' }}>
+        {/* Dynamic API Status, WIB Clock & Bot Uptime */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.7rem' }}>
+          {/* Live WIB Clock Badge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#12161c', padding: '3px 8px', borderRadius: '4px', border: '1px solid var(--binance-border)' }}>
+            <Globe size={12} color="var(--binance-green)" />
+            <span className="mono" style={{ color: 'var(--binance-text)', fontWeight: 700, fontSize: '0.7rem' }}>
+              {wibTime || 'Loading WIB...'}
+            </span>
+          </div>
+
           {/* Active Uptime Duration Badge */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#12161c', padding: '3px 8px', borderRadius: '4px', border: '1px solid var(--binance-border)' }}>
             <Clock size={12} color="var(--binance-yellow)" />

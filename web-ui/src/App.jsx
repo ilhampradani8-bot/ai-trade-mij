@@ -7,6 +7,8 @@ import PositionsTable from './components/PositionsTable';
 import HistoryTable from './components/HistoryTable';
 import ScannerTab from './components/ScannerTab';
 import AiInsightsTab from './components/AiInsightsTab';
+import CoinHealthTab from './components/CoinHealthTab';
+import PaperTab from './components/PaperTab';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('console');
@@ -75,7 +77,7 @@ export default function App() {
   // Pure 100% Live REST API Sync with Freqtrade Daemon
   useEffect(() => {
     let isMounted = true;
-    const authHeader = 'Basic ' + btoa('freqtrader:SuperSecretPassword123!');
+    const authHeader = 'Basic ' + btoa('admin:Password123!');
     const fetchHeaders = { 'Authorization': authHeader };
 
     const fetchBotData = async () => {
@@ -246,6 +248,16 @@ export default function App() {
         {/* PAGE 5: Model AI SB3 Insights */}
         {activeTab === 'insights' && (
           <AiInsightsTab winRate={winRate} />
+        )}
+
+        {/* PAGE 6: Monitored Coins Health & Download Status */}
+        {activeTab === 'coinhealth' && (
+          <CoinHealthTab dynamicPairs={dynamicPairs} />
+        )}
+
+        {/* PAGE 7: Scientific Journal Paper (JMST Format) */}
+        {activeTab === 'paper' && (
+          <PaperTab />
         )}
       </main>
     </div>

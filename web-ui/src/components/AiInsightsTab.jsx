@@ -1,7 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { BrainCircuit, Activity, ShieldCheck, Terminal, AlertTriangle, CheckCircle } from 'lucide-react';
 
-export default function AiInsightsTab({ winRate }) {
+// Filter only AI Process & FreqAI engine logs (filtering out HTTP/web server noise)
+function isAiProcessLog(log) {
+  if (!log || log.length < 5) return false;
+  const moduleName = String(log[2] || '').toLowerCase();
+  const message = String(log[4] || '').toLowerCase();
+
+  // Exclude web server & HTTP polling noise
+  if (moduleName.includes('uvicorn') || message.includes('http/1.1') || message.includes('/api/v1/')) {
+    return false;
+  }
+
+  // AI & FreqAI trading process modules and keywords
+  const isAiModule = moduleName.includes('freqai') || 
+                     moduleName.includes('datasieve') || 
+                     moduleName.includes('strategy') || 
+                     moduleName.includes('catboost') ||
+                     moduleName.includes('persistence') ||
+                     moduleName.includes('worker') ||
+                     moduleName.includes('freqtradebot');
+
+  const isAiMessage = message.includes('freqai') || 
+                      message.includes('model') || 
+                      message.includes('train') || 
+                      message.includes('predict') || 
+                      message.includes('feature') || 
+                      message.includes('trade') || 
+                      message.includes('limit_buy') || 
+                      message.includes('limit_sell') || 
+                      message.includes('fulfilled') || 
+                      message.includes('queue') || 
+                      message.includes('signal');
+
+  return isAiModule || isAiMessage;
+}
+
+export default function AiInsightsTab({ winRate = 0 }) {
   const [configData, setConfigData] = useState(null);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +46,7 @@ export default function AiInsightsTab({ winRate }) {
     let isMounted = true;
     const fetchData = async () => {
       try {
-        const authHeader = 'Basic ' + btoa('freqtrader:SuperSecretPassword123!');
+        const authHeader = 'Basic ' + btoa('admin:Password123!');
         
         // 1. Fetch Config
         const resConfig = await fetch('/api/v1/show_config', { headers: { 'Authorization': authHeader } });
@@ -25,8 +60,11 @@ export default function AiInsightsTab({ winRate }) {
         if (resLogs.ok) {
           const dataLogs = await resLogs.json();
           if (isMounted && dataLogs.logs) {
-            // Logs come as array of [timestamp, unix_ts, module, level, message]
-            setLogs(dataLogs.logs.reverse());
+            // Filter strictly for AI Process logs & sort NEWEST at the TOP
+            const aiOnlyLogs = dataLogs.logs.filter(isAiProcessLog);
+            // Sort by timestamp descending (newest log at index 0)
+            aiOnlyLogs.sort((a, b) => (b[1] || 0) - (a[1] || 0));
+            setLogs(aiOnlyLogs);
           }
         }
       } catch (err) {
@@ -37,7 +75,7 @@ export default function AiInsightsTab({ winRate }) {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(fetchData, 3000);
     return () => {
       isMounted = false;
       clearInterval(interval);
@@ -90,7 +128,7 @@ export default function AiInsightsTab({ winRate }) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
               <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Realized Win Rate</span>
-              <span className="mono" style={{ color: 'var(--binance-yellow)', fontWeight: 700, fontSize: '0.75rem' }}>{winRate.toFixed(1)}%</span>
+              <span className="mono" style={{ color: 'var(--binance-yellow)', fontWeight: 700, fontSize: '0.75rem' }}>{(Number(winRate) || 0).toFixed(1)}%</span>
             </div>
           </div>
         </div>
@@ -120,7 +158,7 @@ export default function AiInsightsTab({ winRate }) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
               <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Scanner Engine</span>
-              <span className="badge-binance badge-yellow" style={{ fontSize: '0.65rem' }}>30 Top Volume Pairs</span>
+              <span className="badge-binance badge-yellow" style={{ fontSize: '0.65rem' }}>30 Top Volume Pairs (60s Refresh)</span>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
@@ -136,7 +174,7 @@ export default function AiInsightsTab({ winRate }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Terminal size={16} color="var(--binance-yellow)" />
-            <h3 style={{ fontSize: '0.85rem', fontWeight: 700 }}>AI Models Execution & System Logs</h3>
+            <h3 style={{ fontSize: '0.85rem', fontWeight: 700 }}>AI Process & Model Execution Logs (Live)</h3>
           </div>
           
           {/* Level Filter Buttons */}
@@ -163,23 +201,24 @@ export default function AiInsightsTab({ winRate }) {
         </div>
 
         {/* Logs Table */}
-        <div className="table-wrapper" style={{ maxHeight: '320px', overflowY: 'auto' }}>
+        <div className="table-wrapper" style={{ maxHeight: '350px', overflowY: 'auto' }}>
           <table className="dense-table" style={{ fontSize: '0.72rem' }}>
             <thead>
               <tr>
                 <th style={{ width: '140px' }}>Waktu (Timestamp)</th>
                 <th style={{ width: '90px' }}>Level</th>
-                <th style={{ width: '180px' }}>Module</th>
-                <th>Pesan System / Log Message</th>
+                <th style={{ width: '180px' }}>Module AI</th>
+                <th>Detail Proses AI / AI Execution Message</th>
               </tr>
             </thead>
             <tbody>
               {filteredLogs && filteredLogs.length > 0 ? (
-                filteredLogs.slice(0, 50).map((log, idx) => {
+                filteredLogs.slice(0, 60).map((log, idx) => {
                   const timestampStr = log[0];
                   const moduleName = log[2];
                   const level = log[3];
                   const message = log[4];
+                  const isLatest = idx === 0; // Topmost row is newest log
 
                   let levelColor = 'var(--binance-text-muted)';
                   let levelBadge = 'badge-yellow';
@@ -190,24 +229,38 @@ export default function AiInsightsTab({ winRate }) {
                     levelColor = 'var(--binance-yellow)';
                     levelBadge = 'badge-yellow';
                   } else if (level === 'INFO') {
-                    levelColor = 'var(--binance-green)';
+                    levelColor = isLatest ? '#ffffff' : 'var(--binance-green)';
                     levelBadge = 'badge-green';
                   }
 
+                  // Distinct styling for the NEWEST log (top row)
+                  const rowStyle = isLatest ? {
+                    background: 'rgba(240, 185, 11, 0.12)',
+                    borderLeft: '4px solid var(--binance-yellow)',
+                    fontWeight: 600
+                  } : {};
+
                   return (
-                    <tr key={idx}>
-                      <td className="mono" style={{ color: 'var(--binance-text-muted)', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>
-                        {timestampStr}
+                    <tr key={idx} style={rowStyle}>
+                      <td className="mono" style={{ color: isLatest ? 'var(--binance-yellow)' : 'var(--binance-text-muted)', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          {isLatest && (
+                            <span className="badge-binance badge-yellow" style={{ fontSize: '0.55rem', padding: '0px 4px', fontWeight: 800 }}>
+                              LATEST
+                            </span>
+                          )}
+                          <span>{timestampStr}</span>
+                        </div>
                       </td>
                       <td>
                         <span className={`badge-binance ${levelBadge}`} style={{ fontSize: '0.6rem', padding: '1px 5px' }}>
                           {level}
                         </span>
                       </td>
-                      <td className="mono" style={{ fontSize: '0.68rem', color: 'var(--binance-text-secondary)', whiteSpace: 'nowrap' }}>
+                      <td className="mono" style={{ fontSize: '0.68rem', color: isLatest ? 'var(--binance-yellow)' : 'var(--binance-text-secondary)', whiteSpace: 'nowrap' }}>
                         {moduleName}
                       </td>
-                      <td className="mono" style={{ color: levelColor, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '0.68rem' }}>
+                      <td className="mono" style={{ color: isLatest ? '#F0B90B' : levelColor, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '0.68rem' }}>
                         {message}
                       </td>
                     </tr>
@@ -216,7 +269,7 @@ export default function AiInsightsTab({ winRate }) {
               ) : (
                 <tr>
                   <td colSpan="4" style={{ textAlign: 'center', color: 'var(--binance-text-muted)', padding: '16px' }}>
-                    {loading ? 'Fetching system logs...' : 'No log events recorded matching filter.'}
+                    {loading ? 'Fetching AI process logs...' : 'Tidak ada log proses AI yang sesuai dengan filter.'}
                   </td>
                 </tr>
               )}

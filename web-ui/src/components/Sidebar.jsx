@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, LayoutDashboard, Layers, BrainCircuit, Search, History, ChevronLeft } from 'lucide-react';
+import { Menu, LayoutDashboard, Layers, BrainCircuit, Search, History, ChevronLeft, FileText, Activity } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollapsed }) {
   const pages = [
@@ -7,13 +7,21 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
     { id: 'positions', label: 'Positions & Slippage', shortLabel: 'Positions', icon: Layers },
     { id: 'history', label: 'Trade History', shortLabel: 'History', icon: History },
     { id: 'scanner', label: 'Market Scanner', shortLabel: 'Scanner', icon: Search },
-    { id: 'insights', label: 'AI Models', shortLabel: 'AI', icon: BrainCircuit }
+    { id: 'insights', label: 'AI Models', shortLabel: 'AI', icon: BrainCircuit },
+    { id: 'coinhealth', label: 'Coin Health Monitor', shortLabel: 'Health', icon: Activity },
+    { id: 'paper', label: 'Scientific Paper (JMST)', shortLabel: 'Paper', icon: FileText }
   ];
 
   return (
-    <aside className="binance-sidebar">
+    <aside 
+      className="binance-sidebar"
+      style={{
+        width: collapsed ? '50px' : '170px',
+        boxSizing: 'border-box'
+      }}
+    >
       {/* DESKTOP VIEW SIDEBAR CONTENT */}
-      <div className="hide-on-mobile" style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
+      <div className="hide-on-mobile" style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', padding: '6px' }}>
         <div>
           {/* Hamburger Menu Header */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', padding: '2px', marginBottom: '8px' }}>
@@ -54,17 +62,18 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    justify: collapsed ? 'center' : 'flex-start',
+                    justifyContent: collapsed ? 'center' : 'flex-start',
                     gap: '8px',
-                    padding: '8px',
+                    padding: '8px 10px',
                     borderRadius: '4px',
                     border: isActive ? '1px solid rgba(240, 185, 11, 0.4)' : '1px solid transparent',
                     background: isActive ? 'var(--binance-card-hover)' : 'transparent',
                     color: isActive ? 'var(--binance-yellow)' : 'var(--binance-text-secondary)',
                     fontWeight: isActive ? 700 : 500,
-                    fontSize: '0.78rem',
+                    fontSize: '0.75rem',
                     cursor: 'pointer',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    width: '100%'
                   }}
                 >
                   <Icon size={16} color={isActive ? 'var(--binance-yellow)' : 'var(--binance-text-secondary)'} />
@@ -90,7 +99,7 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justify: 'center',
+                justifyContent: 'center',
                 gap: '2px',
                 height: '100%',
                 background: 'transparent',

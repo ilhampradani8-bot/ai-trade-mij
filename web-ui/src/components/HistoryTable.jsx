@@ -5,7 +5,11 @@ function formatTradeDateTime(dateStr, timestamp) {
   if (!dateStr && !timestamp) return { dayDate: '-', timeStr: '-' };
   let d;
   if (typeof dateStr === 'string' && dateStr.trim()) {
-    d = new Date(dateStr.replace(' ', 'T'));
+    let formattedStr = dateStr.replace(' ', 'T');
+    if (!formattedStr.endsWith('Z') && !formattedStr.includes('+')) {
+      formattedStr += 'Z';
+    }
+    d = new Date(formattedStr);
   } else if (timestamp) {
     d = new Date(timestamp);
   } else {
@@ -14,22 +18,13 @@ function formatTradeDateTime(dateStr, timestamp) {
   
   if (isNaN(d.getTime())) return { dayDate: dateStr || '-', timeStr: '-' };
 
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const optionsDate = { timeZone: 'Asia/Jakarta', weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+  const optionsTime = { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
 
-  const dayName = days[d.getDay()];
-  const dateNum = String(d.getDate()).padStart(2, '0');
-  const monthName = months[d.getMonth()];
-  const year = d.getFullYear();
+  const dayDate = new Intl.DateTimeFormat('en-GB', optionsDate).format(d);
+  const timeStr = new Intl.DateTimeFormat('id-ID', optionsTime).format(d) + ' WIB';
 
-  const hours = String(d.getHours()).padStart(2, '0');
-  const minutes = String(d.getMinutes()).padStart(2, '0');
-  const seconds = String(d.getSeconds()).padStart(2, '0');
-
-  return {
-    dayDate: `${dayName}, ${dateNum} ${monthName} ${year}`,
-    timeStr: `${hours}:${minutes}:${seconds}`
-  };
+  return { dayDate, timeStr };
 }
 
 export default function HistoryTable({ closedTrades, onSelectPair }) {

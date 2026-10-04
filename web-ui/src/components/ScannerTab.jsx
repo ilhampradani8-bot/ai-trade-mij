@@ -10,7 +10,7 @@ export default function ScannerTab({ pairs, onSelectPair }) {
 
     const fetchTickerPrices = async () => {
       try {
-        const authHeader = 'Basic ' + btoa('freqtrader:SuperSecretPassword123!');
+        const authHeader = 'Basic ' + btoa('admin:Password123!');
         const res = await fetch('/api/v1/whitelist', { headers: { 'Authorization': authHeader } });
         
         let currentPairs = pairs;
@@ -91,7 +91,7 @@ export default function ScannerTab({ pairs, onSelectPair }) {
               <th>Last Price ($)</th>
               <th>24h Change</th>
               <th>24h Volume ($M)</th>
-              <th style={{ color: 'var(--binance-yellow)' }}>CatBoost Signal</th>
+              <th style={{ color: 'var(--binance-yellow)' }}>FreqAI Signal</th>
               <th>Action</th>
             </tr>
           </thead>
