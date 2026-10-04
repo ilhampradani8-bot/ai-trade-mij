@@ -56,20 +56,11 @@ export default function CoinHealthTab({ dynamicPairs = [] }) {
     return () => clearInterval(interval);
   }, []);
 
-  // Standard monitored pairs master list
-  const masterPairList = [
-    "BTC/USDT", "ETH/USDT", "SOL/USDT", "NEAR/USDT", 
-    "XRP/USDT", "ZEC/USDT", "SUI/USDT", "WLD/USDT", 
-    "DOGE/USDT", "ADA/USDT", "AVAX/USDT", "LINK/USDT"
-  ];
+  // Dynamically monitored whitelist pairs from REST API
+  const activePairList = activePairs.length > 0 ? activePairs : dynamicPairs;
 
-  // Combine dynamic whitelist with candidates
-  const currentWhitelistSet = new Set(activePairs.length > 0 ? activePairs : dynamicPairs);
-  const combinedPairs = Array.from(new Set([...currentWhitelistSet, ...masterPairList]));
-
-  // Build live coin health objects
-  const coinHealthList = combinedPairs.map(pair => {
-    const isWhitelisted = currentWhitelistSet.has(pair);
+  // Build live coin health objects strictly for active dynamic pairs
+  const coinHealthList = activePairList.map(pair => {
     const hasOpenTrade = openTradesSet.has(pair);
     
     // Check recent logs for errors or warnings related to this pair
@@ -78,7 +69,7 @@ export default function CoinHealthTab({ dynamicPairs = [] }) {
     const hasWarning = pairLogs.some(l => l.includes('WARNING') && !l.includes('No model ready'));
 
     let status = 'healthy';
-    let errorMsg = 'No Errors (Operational)';
+    let errorMsg = 'No Errors (Auto-Downloaded)';
 
     if (hasError) {
       status = 'error';
@@ -86,20 +77,16 @@ export default function CoinHealthTab({ dynamicPairs = [] }) {
     } else if (hasWarning) {
       status = 'warning';
       errorMsg = 'Warning Logged';
-    } else if (isWhitelisted) {
-      errorMsg = 'No Errors (Auto-Downloaded)';
-    } else {
-      errorMsg = 'No Errors (Candidate Pool)';
     }
 
     return {
       pair,
-      isWhitelisted,
+      isWhitelisted: true,
       hasOpenTrade,
-      candles5m: isWhitelisted ? 2879 : 1000,
-      candles15m: isWhitelisted ? 2879 : 1000,
+      candles5m: 2879,
+      candles15m: 2879,
       freshness: '2s ago',
-      modelStatus: isWhitelisted ? 'Model Ready' : 'Standby Queue',
+      modelStatus: 'Model Ready',
       status,
       errorMsg
     };
@@ -208,7 +195,7 @@ export default function CoinHealthTab({ dynamicPairs = [] }) {
             {coinHealthList.length} <span style={{ fontSize: '0.75rem', color: 'var(--binance-text-secondary)' }}>Pairs</span>
           </div>
           <div style={{ fontSize: '0.68rem', color: 'var(--binance-green)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <CheckCircle size={12} /> {currentWhitelistSet.size} Active Whitelist + {coinHealthList.length - currentWhitelistSet.size} Candidates
+            <CheckCircle size={12} /> {coinHealthList.length} Active Whitelist Pairs (Top Volume Exchange Stream)
           </div>
         </div>
 
@@ -361,20 +348,7 @@ export default function CoinHealthTab({ dynamicPairs = [] }) {
 
                 {/* Whitelist Status */}
                 <td>
-                  {coin.isWhitelisted ? (
-                    <span className="badge-binance badge-green">🟢 Active Whitelist</span>
-                  ) : (
-                    <span style={{
-                      background: 'rgba(132, 142, 156, 0.15)',
-                      color: 'var(--binance-text-secondary)',
-                      padding: '2px 6px',
-                      borderRadius: '3px',
-                      fontSize: '0.68rem',
-                      fontWeight: 600
-                    }}>
-                      Candidate Pool
-                    </span>
-                  )}
+                  <span className="badge-binance badge-green">🟢 Top 30 Whitelist</span>
                 </td>
 
                 {/* Open Trade Status */}
