@@ -199,17 +199,15 @@ export default function App() {
           uptimeSeconds={uptimeSeconds}
         />
 
-        {/* Full Width Metric Strip */}
+        {/* Apple iTunes Classic Full Width Metric LCD Strip */}
         <StatCards 
           balance={balance} 
           activeTradesCount={openTrades.length} 
           maxTrades={12} 
           totalPnl={totalPnl} 
           winRate={winRate}
+          openTrades={openTrades}
         />
-
-        {/* Dynamic Tier Allocation Cards */}
-        <TierCards openTrades={openTrades} />
 
         {/* MODULAR PAGE VIEWS */}
 

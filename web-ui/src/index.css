@@ -1,16 +1,19 @@
 :root {
-  --binance-bg: #0b0e11;
-  --binance-card: #181a20;
-  --binance-card-hover: #1e2329;
-  --binance-header: #12161c;
-  --binance-border: #2b313a;
-  --binance-green: #0ecb81;
-  --binance-red: #f6465d;
-  --binance-yellow: #f0b90b;
-  --binance-blue: #3b82f6;
-  --binance-text: #eaecef;
-  --binance-text-secondary: #848e9c;
-  --binance-text-muted: #5e6673;
+  --itunes-bg: #121418;
+  --itunes-panel: #1b1e24;
+  --itunes-panel-hover: #232730;
+  --itunes-header: #16181d;
+  --itunes-border: #2b303a;
+  --itunes-accent: #0a84ff;
+  --itunes-green: #30d158;
+  --itunes-red: #ff453a;
+  --itunes-yellow: #ffd60a;
+  --itunes-blue: #64d2ff;
+  --itunes-text: #f2f2f7;
+  --itunes-text-secondary: #8e8e93;
+  --itunes-text-muted: #636366;
+  --itunes-lcd-bg: #0b0d10;
+  --itunes-lcd-border: #22262e;
 }
 
 * {
@@ -20,9 +23,9 @@
 }
 
 body {
-  background-color: var(--binance-bg);
-  color: var(--binance-text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--itunes-bg);
+  color: var(--itunes-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   line-height: 1.35;
   font-size: 0.78rem;
@@ -32,19 +35,20 @@ body {
 }
 
 .mono {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Binance Ultra-Compact Full-Width Card */
-.binance-panel {
-  background: var(--binance-card);
-  border: 1px solid var(--binance-border);
+/* iTunes Classic Panel */
+.binance-panel, .itunes-panel {
+  background: var(--itunes-panel);
+  border: 1px solid var(--itunes-border);
   border-radius: 4px;
   padding: 8px 10px;
   width: 100%;
+  box-sizing: border-box;
 }
 
-/* Desktop Fixed Frozen Left Sidebar */
+/* Desktop Fixed Frozen Left Sidebar - iTunes Style */
 @media (min-width: 769px) {
   .binance-sidebar {
     position: fixed;
@@ -52,13 +56,13 @@ body {
     left: 0;
     height: 100vh;
     z-index: 1000;
-    background: var(--binance-card);
-    border-right: 1px solid var(--binance-border);
-    transition: width 0.2s ease-in-out;
+    background: #15171c;
+    border-right: 1px solid var(--itunes-border);
+    transition: width 0.15s ease-in-out;
   }
 }
 
-/* Dense Data Table */
+/* iTunes Tracklist / Dense Data Table */
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
@@ -73,29 +77,34 @@ body {
 .dense-table th {
   text-align: left;
   padding: 6px 10px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--binance-text-secondary);
-  border-bottom: 1px solid var(--binance-border);
-  background: #14181d;
+  color: var(--itunes-text-secondary);
+  border-bottom: 1px solid var(--itunes-border);
+  background: #14161b;
   white-space: nowrap;
+  letter-spacing: 0.3px;
 }
 
 .dense-table td {
   padding: 6px 10px;
   font-size: 0.78rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   white-space: nowrap;
 }
 
-.dense-table tr:hover {
-  background: var(--binance-card-hover);
+.dense-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
 }
 
-/* Badges */
+.dense-table tbody tr:hover {
+  background: var(--itunes-panel-hover);
+}
+
+/* Apple iTunes Badges */
 .badge-binance {
-  padding: 1px 6px;
+  padding: 2px 7px;
   border-radius: 3px;
   font-size: 0.68rem;
   font-weight: 600;
@@ -105,32 +114,32 @@ body {
 }
 
 .badge-green {
-  background: rgba(14, 203, 129, 0.15);
-  color: var(--binance-green);
-  border: 1px solid rgba(14, 203, 129, 0.3);
+  background: rgba(48, 209, 88, 0.15);
+  color: var(--itunes-green);
+  border: 1px solid rgba(48, 209, 88, 0.3);
 }
 
 .badge-red {
-  background: rgba(246, 70, 93, 0.15);
-  color: var(--binance-red);
-  border: 1px solid rgba(246, 70, 93, 0.3);
+  background: rgba(255, 69, 58, 0.15);
+  color: var(--itunes-red);
+  border: 1px solid rgba(255, 69, 58, 0.3);
 }
 
 .badge-yellow {
-  background: rgba(240, 185, 11, 0.15);
-  color: var(--binance-yellow);
-  border: 1px solid rgba(240, 185, 11, 0.3);
+  background: rgba(255, 214, 10, 0.15);
+  color: var(--itunes-yellow);
+  border: 1px solid rgba(255, 214, 10, 0.3);
 }
 
 .pulse-green {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--binance-green);
-  box-shadow: 0 0 6px var(--binance-green);
+  background: var(--itunes-green);
+  box-shadow: 0 0 6px var(--itunes-green);
 }
 
-/* MOBILE (HP) BINANCE STYLE BOTTOM NAVIGATION (<768px) */
+/* Mobile Bottom Navigation Bar (<768px) */
 @media (max-width: 768px) {
   .binance-sidebar {
     position: fixed !important;
@@ -139,18 +148,18 @@ body {
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
-    height: 56px !important;
+    height: 54px !important;
     min-height: unset !important;
     border-right: none !important;
-    border-top: 1px solid var(--binance-border) !important;
-    background: #12161c !important;
+    border-top: 1px solid var(--itunes-border) !important;
+    background: #14161b !important;
     z-index: 9999 !important;
   }
   
   .main-content {
     margin-left: 0 !important;
     width: 100% !important;
-    padding: 6px 6px 64px 6px !important; /* Extra bottom padding for sticky nav */
+    padding: 6px 6px 60px 6px !important;
   }
 
   .desktop-grid {
@@ -163,12 +172,8 @@ body {
     padding: 6px 8px !important;
   }
 
-  .stat-strip > div {
-    border-left: none !important;
-    padding-left: 0 !important;
-  }
-
   .hide-on-mobile {
     display: none !important;
   }
 }
+

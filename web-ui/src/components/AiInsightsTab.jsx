@@ -95,86 +95,52 @@ export default function AiInsightsTab({ winRate = 0 }) {
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      {/* Top Grid: Model Specs & Feature Engineering Pipeline */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="desktop-grid">
-        {/* Dynamic FreqAI Model Specs */}
-        <div className="binance-panel" style={{ padding: '14px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <BrainCircuit size={18} color="var(--binance-yellow)" />
-            <h3 style={{ fontSize: '0.85rem', fontWeight: 700 }}>FreqAI Engine Live Configuration</h3>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Model Class</span>
-              <span className="mono" style={{ fontWeight: 700, color: 'var(--binance-yellow)', fontSize: '0.75rem' }}>{modelName}</span>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Model Identifier</span>
-              <span className="mono" style={{ fontWeight: 600, fontSize: '0.75rem' }}>{identifier}</span>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Training Window</span>
-              <span className="mono" style={{ fontSize: '0.75rem' }}>{trainPeriod} Days Historical Candles</span>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Max Open Positions</span>
-              <span className="badge-binance badge-green" style={{ fontSize: '0.65rem' }}>{maxTrades} Concurrent Slots</span>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Realized Win Rate</span>
-              <span className="mono" style={{ color: 'var(--binance-yellow)', fontWeight: 700, fontSize: '0.75rem' }}>{(Number(winRate) || 0).toFixed(1)}%</span>
-            </div>
-          </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
+      {/* iTunes Full-Width Engine & Feature Engineering Metrics Table */}
+      <div className="binance-panel" style={{ padding: '10px 12px', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <BrainCircuit size={16} color="var(--itunes-yellow)" />
+          <h3 style={{ fontSize: '0.85rem', fontWeight: 700 }}>FreqAI Engine Configuration &amp; Feature Pipeline</h3>
         </div>
 
-        {/* Live Feature Timeframes & Signals Info */}
-        <div className="binance-panel" style={{ padding: '14px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <Activity size={18} color="var(--binance-yellow)" />
-            <h3 style={{ fontSize: '0.85rem', fontWeight: 700 }}>Active Feature Engineering Pipeline</h3>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Included Timeframes</span>
-              <span className="mono" style={{ color: 'var(--binance-yellow)', fontWeight: 600, fontSize: '0.75rem' }}>5m, 15m</span>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Correlation Benchmarks</span>
-              <span className="mono" style={{ fontSize: '0.75rem' }}>BTC/USDT, ETH/USDT</span>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Target Horizon</span>
-              <span className="mono" style={{ fontSize: '0.75rem' }}>12 Candles (1 Hour Ahead)</span>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>Scanner Engine</span>
-              <span className="badge-binance badge-yellow" style={{ fontSize: '0.65rem' }}>30 Top Volume Pairs (60s Refresh)</span>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 10px', background: '#12161c', borderRadius: '4px' }}>
-              <span style={{ color: 'var(--binance-text-secondary)', fontSize: '0.75rem' }}>API Sync</span>
-              <span className="mono" style={{ color: 'var(--binance-green)', fontWeight: 600, fontSize: '0.75rem' }}>100% Live REST Stream</span>
-            </div>
-          </div>
+        <div className="table-wrapper">
+          <table className="dense-table" style={{ width: '100%' }}>
+            <thead>
+              <tr>
+                <th>Model Class</th>
+                <th>Model Identifier</th>
+                <th>Training Window</th>
+                <th>Max Positions</th>
+                <th>Realized Win Rate</th>
+                <th>Feature Timeframes</th>
+                <th>Correlations</th>
+                <th>Target Horizon</th>
+                <th>API Sync</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="mono" style={{ fontWeight: 700, color: 'var(--itunes-yellow)' }}>{modelName}</td>
+                <td className="mono">{identifier}</td>
+                <td className="mono">{trainPeriod} Days Candles</td>
+                <td><span className="badge-binance badge-green">{maxTrades} Slots</span></td>
+                <td className="mono" style={{ color: 'var(--itunes-yellow)', fontWeight: 700 }}>{(Number(winRate) || 0).toFixed(1)}%</td>
+                <td className="mono" style={{ color: 'var(--itunes-yellow)' }}>5m, 15m</td>
+                <td className="mono">BTC/USDT, ETH/USDT</td>
+                <td className="mono">12 Candles (1h)</td>
+                <td><span className="mono" style={{ color: 'var(--itunes-green)', fontWeight: 600 }}>100% Live REST</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      {/* Bottom Panel: AI Execution & System Error Logs Table */}
-      <div className="binance-panel" style={{ padding: '14px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+      {/* Bottom Panel: AI Execution & System Logs Table (Full Width) */}
+      <div className="binance-panel" style={{ padding: '10px 12px', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Terminal size={16} color="var(--binance-yellow)" />
-            <h3 style={{ fontSize: '0.85rem', fontWeight: 700 }}>AI Process & Model Execution Logs (Live)</h3>
+            <Terminal size={16} color="var(--itunes-yellow)" />
+            <h3 style={{ fontSize: '0.85rem', fontWeight: 700 }}>AI Process &amp; Model Execution Logs (Live Stream)</h3>
           </div>
           
           {/* Level Filter Buttons */}
@@ -184,12 +150,12 @@ export default function AiInsightsTab({ winRate = 0 }) {
                 key={lvl}
                 onClick={() => setFilterLevel(lvl)}
                 style={{
-                  background: filterLevel === lvl ? 'var(--binance-yellow)' : '#12161c',
-                  color: filterLevel === lvl ? '#000' : 'var(--binance-text-muted)',
-                  border: '1px solid var(--binance-border)',
+                  background: filterLevel === lvl ? 'var(--itunes-yellow)' : '#14161b',
+                  color: filterLevel === lvl ? '#000' : 'var(--itunes-text-secondary)',
+                  border: '1px solid var(--itunes-border)',
                   borderRadius: '3px',
                   padding: '2px 8px',
-                  fontSize: '0.65rem',
+                  fontSize: '0.68rem',
                   fontWeight: 700,
                   cursor: 'pointer'
                 }}
@@ -201,48 +167,47 @@ export default function AiInsightsTab({ winRate = 0 }) {
         </div>
 
         {/* Logs Table */}
-        <div className="table-wrapper" style={{ maxHeight: '350px', overflowY: 'auto' }}>
-          <table className="dense-table" style={{ fontSize: '0.72rem' }}>
+        <div className="table-wrapper" style={{ maxHeight: '420px', overflowY: 'auto', width: '100%' }}>
+          <table className="dense-table" style={{ fontSize: '0.72rem', width: '100%' }}>
             <thead>
               <tr>
-                <th style={{ width: '140px' }}>Waktu (Timestamp)</th>
+                <th style={{ width: '150px' }}>Timestamp</th>
                 <th style={{ width: '90px' }}>Level</th>
-                <th style={{ width: '180px' }}>Module AI</th>
-                <th>Detail Proses AI / AI Execution Message</th>
+                <th style={{ width: '180px' }}>AI Module</th>
+                <th>AI Execution &amp; Prediction Logs</th>
               </tr>
             </thead>
             <tbody>
               {filteredLogs && filteredLogs.length > 0 ? (
-                filteredLogs.slice(0, 60).map((log, idx) => {
+                filteredLogs.slice(0, 80).map((log, idx) => {
                   const timestampStr = log[0];
                   const moduleName = log[2];
                   const level = log[3];
                   const message = log[4];
-                  const isLatest = idx === 0; // Topmost row is newest log
+                  const isLatest = idx === 0;
 
-                  let levelColor = 'var(--binance-text-muted)';
+                  let levelColor = 'var(--itunes-text-muted)';
                   let levelBadge = 'badge-yellow';
                   if (level === 'ERROR') {
-                    levelColor = 'var(--binance-red)';
+                    levelColor = 'var(--itunes-red)';
                     levelBadge = 'badge-red';
                   } else if (level === 'WARNING') {
-                    levelColor = 'var(--binance-yellow)';
+                    levelColor = 'var(--itunes-yellow)';
                     levelBadge = 'badge-yellow';
                   } else if (level === 'INFO') {
-                    levelColor = isLatest ? '#ffffff' : 'var(--binance-green)';
+                    levelColor = isLatest ? '#ffffff' : 'var(--itunes-green)';
                     levelBadge = 'badge-green';
                   }
 
-                  // Distinct styling for the NEWEST log (top row)
                   const rowStyle = isLatest ? {
-                    background: 'rgba(240, 185, 11, 0.12)',
-                    borderLeft: '4px solid var(--binance-yellow)',
+                    background: 'rgba(255, 214, 10, 0.12)',
+                    borderLeft: '4px solid var(--itunes-yellow)',
                     fontWeight: 600
                   } : {};
 
                   return (
                     <tr key={idx} style={rowStyle}>
-                      <td className="mono" style={{ color: isLatest ? 'var(--binance-yellow)' : 'var(--binance-text-muted)', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>
+                      <td className="mono" style={{ color: isLatest ? 'var(--itunes-yellow)' : 'var(--itunes-text-secondary)', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                           {isLatest && (
                             <span className="badge-binance badge-yellow" style={{ fontSize: '0.55rem', padding: '0px 4px', fontWeight: 800 }}>
@@ -257,10 +222,10 @@ export default function AiInsightsTab({ winRate = 0 }) {
                           {level}
                         </span>
                       </td>
-                      <td className="mono" style={{ fontSize: '0.68rem', color: isLatest ? 'var(--binance-yellow)' : 'var(--binance-text-secondary)', whiteSpace: 'nowrap' }}>
+                      <td className="mono" style={{ fontSize: '0.68rem', color: isLatest ? 'var(--itunes-yellow)' : 'var(--itunes-text-secondary)', whiteSpace: 'nowrap' }}>
                         {moduleName}
                       </td>
-                      <td className="mono" style={{ color: isLatest ? '#F0B90B' : levelColor, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '0.68rem' }}>
+                      <td className="mono" style={{ color: isLatest ? 'var(--itunes-yellow)' : levelColor, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '0.68rem' }}>
                         {message}
                       </td>
                     </tr>
@@ -268,8 +233,8 @@ export default function AiInsightsTab({ winRate = 0 }) {
                 })
               ) : (
                 <tr>
-                  <td colSpan="4" style={{ textAlign: 'center', color: 'var(--binance-text-muted)', padding: '16px' }}>
-                    {loading ? 'Fetching AI process logs...' : 'Tidak ada log proses AI yang sesuai dengan filter.'}
+                  <td colSpan="4" style={{ textAlign: 'center', color: 'var(--itunes-text-muted)', padding: '20px' }}>
+                    {loading ? 'Fetching AI process logs...' : 'No AI process logs matching the selected filter level.'}
                   </td>
                 </tr>
               )}
